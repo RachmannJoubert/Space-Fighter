@@ -4,8 +4,10 @@ import os
 pygame.display.set_caption("Space Pong")
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+BORDER =pygame.Rect(WIDTH/2 - 5, 0, 10, HEIGHT)
 
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 FPS = 60
 VEL = 5
 
@@ -24,6 +26,7 @@ YELLOW_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
 def draw_window(red, yellow):
     
     WIN.fill(WHITE)
+    pygame.draw.rect(WIN, BLACK, BORDER)
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
     pygame.display.update()
