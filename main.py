@@ -8,12 +8,21 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 WHITE = (255, 255, 255)
 FPS = 60
 
-YELLOW_SPACESHIP_IMAGE = pygame.image.load(os.path.join('Assets', 'spaceship_yellow.png'))
-RED_SPACESHIP_IMAGE = pygame.image.load(os.path.join('Assets', 'spaceship_red.png'))
+SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 40
+
+YELLOW_SPACESHIP_IMAGE = pygame.image.load(os.path.join(
+    'Assets', 'spaceship_yellow.png'))
+YELLOW_SPACESHIP = pygame.transform.scale(YELLOW_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT))
+
+RED_SPACESHIP_IMAGE = pygame.image.load(os.path.join(
+    'Assets', 'spaceship_red.png'))
+RED_SPACESHIP = pygame.transform.scale(RED_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT))
+
 
 def draw_window():
     
     WIN.fill(WHITE)
+    WIN.blit(YELLOW_SPACESHIP_IMAGE, ())
     pygame.display.update()
 
 
