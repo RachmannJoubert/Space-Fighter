@@ -7,7 +7,8 @@ WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 BORDER =pygame.Rect(WIDTH/2 - 5, 0, 10, HEIGHT)
 
-HEALTH_FONT =pygame.font.SysFont('comicsans', 40)
+HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
+WINNER_FONT = pygame.font.SysFont('ubuntu', 100)
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -98,6 +99,13 @@ def handle_projeciles(red_projectiles, yellow_projectiles, red, yellow):
         elif projectile.x < 0:
             yellow_projectiles.remove(projectile)
 
+def winner(text):
+    draw_text = WINNER_FONT.render(text, 1, WHITE)
+    WIN.blit(draw_text, (WIDTH/2 - draw_text.get_width()/2, HEIGHT/2 - draw_text.get_height()/2))
+    pygame.display.update()
+    pygame.time.delay(3000)
+
+
 def main():
 
     red = pygame.Rect(100, 200, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
@@ -117,6 +125,7 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
+                pygame.quit()
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LCTRL and len(red_projectiles) < MAX_PROJECTILES:
@@ -133,15 +142,16 @@ def main():
             if event.type == YELLOW_HIT:
                 yellow_health -= 1
 
-            winner_text = ""
-            if red_health <= 0:
-                winner_text = "Yellow Wins!"
+        winner_text = ""
+        if red_health <= 0:
+            winner_text = "Yellow Wins!"
 
-            if yellow_health <= 0:
-                winner_text = "Red Wins!"
+        if yellow_health <= 0:
+            winner_text = "Red Wins!"
 
-            # if winner_text != "":
-            #     pass # SOMEONE HAS WON
+        if winner_text != "":
+            winner(winner_text)
+            break
 
         keys_pressed = pygame.key.get_pressed()
         handle_red_movement(keys_pressed, red)
@@ -151,7 +161,7 @@ def main():
          
         draw_window(red, yellow, red_projectiles, yellow_projectiles, red_health, yellow_health)
 
-    pygame.quit()
+    main()
 
 if __name__ == "__main__":
     main()
