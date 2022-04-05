@@ -1,11 +1,16 @@
 import pygame
 import os
 pygame.font.init()
+pygame.mixer.init()
 
 pygame.display.set_caption("Space Pong")
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
+
 BORDER =pygame.Rect(WIDTH/2 - 5, 0, 10, HEIGHT)
+
+PROJECTILE_HIT_SOUND = pygame.mixer.load(os.path.join('Assets', 'Grenade+1.mp3'))
+PROJECTILE_FIRE_SOUND = pygame.mixer.load(os.path.join('Assets', 'Gun+Silencer.mp3'))
 
 HEALTH_FONT = pygame.font.SysFont('comicsans', 40)
 WINNER_FONT = pygame.font.SysFont('ubuntu', 100)
