@@ -1,10 +1,13 @@
 import pygame
 import os
+pygame.font.init()
 
 pygame.display.set_caption("Space Pong")
 WIDTH, HEIGHT = 900, 500
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 BORDER =pygame.Rect(WIDTH/2 - 5, 0, 10, HEIGHT)
+
+HEALTH_FONT =pygame.font.SysFont('comicsans', 40)
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
@@ -33,14 +36,20 @@ YELLOW_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
 
 BACKGROUND_IMG = pygame.transform.scale(pygame.image.load(os.path.join('Assets', 'space.png')), (WIDTH, HEIGHT))
 
-def draw_window(red, yellow, red_projectiles, yellow_prjectiles):
-    
+def draw_window(red, yellow, red_projectiles, yellow_prjectiles, red_health, yellow_health):
+
     WIN.blit(BACKGROUND_IMG, (0, 0))
     pygame.draw.rect(WIN, BLACK, BORDER)
+
+    red_health_text = HEALTH_FONT.render("HEALTH: " + str(red_health), 1, WHITE)
+    yellow_health_text = HEALTH_FONT.render("HEALTH: " + str(yellow_health), 1, WHITE)
+
+    WIN.blit(red_health_text, (10, 10))
+    WIN.blit(yellow_health_text, (WIDTH - yellow_health_text.get_width() -15, 10))
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
 
-    for projectile in red_projectiles:
+    for projectile in red_projectiles: 
         pygame.draw.rect(WIN, RED, projectile)
 
     for projectile in yellow_prjectiles:
@@ -96,6 +105,9 @@ def main():
 
     red_projectiles = []
     yellow_projectiles = []
+
+    red_health = int(10)
+    yellow_health = int(10)
     
     clock = pygame.time.Clock()
     run = True
@@ -115,13 +127,29 @@ def main():
                     projectile = pygame.Rect(yellow.x, yellow.y + yellow.height/2 + 2.5, 10, 5)
                     yellow_projectiles.append(projectile)
 
+            if event.type == RED_HIT:
+                red_health -= 1
+
+            if event.type == YELLOW_HIT:
+                yellow_health -= 1
+
+            winner_text = ""
+            if red_health <= 0:
+                winner_text = "Yellow Wins!"
+
+            if yellow_health <= 0:
+                winner_text = "Red Wins!"
+
+            # if winner_text != "":
+            #     pass # SOMEONE HAS WON
+
         keys_pressed = pygame.key.get_pressed()
         handle_red_movement(keys_pressed, red)
         handle_yellow_movement(keys_pressed, yellow)
 
         handle_projeciles(red_projectiles, yellow_projectiles, red, yellow)
          
-        draw_window(red, yellow, red_projectiles, yellow_projectiles)
+        draw_window(red, yellow, red_projectiles, yellow_projectiles, red_health, yellow_health)
 
     pygame.quit()
 
