@@ -10,6 +10,8 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 FPS = 60
 VEL = 5
+PROJECTILE_VEL = 10
+MAX_PROJECTILES = 5
 
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 45
 
@@ -55,6 +57,9 @@ def main():
 
     red = pygame.Rect(100, 200, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
     yellow = pygame.Rect(700, 200, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
+
+    red_projectiles = []
+    yellow_projectiles = []
     
     clock = pygame.time.Clock()
     run = True
@@ -65,6 +70,15 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LCTRL and len(red_projectiles) < MAX_PROJECTILES:
+                    projectile = pygame.Rect(red.x + red.width, red.y + red.height/2 - 2.5, 10, 5)
+                    red_projectiles.append(projectile)
+
+                if event.key == pygame.K_RCTRL and len(yellow_projectiles) < MAX_PROJECTILES:
+                    projectile = pygame.Rect(yellow.x, yellow.y + yellow.height/2 - 2.5, 10, 5)
+                    yellow_projectiles.append(projectile)
+        print(red_projectiles, yellow_projectiles)
         keys_pressed = pygame.key.get_pressed()
         handle_red_movement(keys_pressed, red)
         handle_yellow_movement(keys_pressed, yellow)
