@@ -8,6 +8,9 @@ BORDER =pygame.Rect(WIDTH/2 - 5, 0, 10, HEIGHT)
 
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+RED = (255, 0, 0)
+YELLOW = (255, 255, 0)
+
 FPS = 60
 VEL = 5
 PROJECTILE_VEL = 10
@@ -28,12 +31,19 @@ YELLOW_SPACESHIP_IMAGE = pygame.image.load(os.path.join(
 YELLOW_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
     YELLOW_SPACESHIP_IMAGE, (SPACESHIP_WIDTH, SPACESHIP_HEIGHT)), 270)
 
-def draw_window(red, yellow):
+def draw_window(red, yellow, red_projectiles, yellow_prjectiles):
     
     WIN.fill(WHITE)
     pygame.draw.rect(WIN, BLACK, BORDER)
     WIN.blit(RED_SPACESHIP, (red.x, red.y))
     WIN.blit(YELLOW_SPACESHIP, (yellow.x, yellow.y))
+
+    for projectile in red_projectiles:
+        pygame.draw.rect(WIN, RED, projectile)
+
+    for projectile in yellow_prjectiles:
+        pygame.draw.rect(WIN, YELLOW, projectile)
+
     pygame.display.update()
 
 def handle_red_movement(keys_pressed, red):
@@ -61,14 +71,14 @@ def handle_projeciles(red_projectiles, yellow_projectiles, red, yellow):
     for projectile in red_projectiles:
         projectile.x += PROJECTILE_VEL
        
-        if red.colliderect(projectile):
+        if yellow.colliderect(projectile):
             pygame.event.post(pygame.event.Event(YELLOW_HIT))
             red_projectiles.remove(projectile)
 
     for projectile in yellow_projectiles:
-        projectile.x += PROJECTILE_VEL
+        projectile.x -= PROJECTILE_VEL
        
-        if yellow.colliderect(projectile):
+        if red.colliderect(projectile):
             pygame.event.post(pygame.event.Event(RED_HIT))
             yellow_projectiles.remove(projectile)
 
@@ -91,20 +101,20 @@ def main():
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LCTRL and len(red_projectiles) < MAX_PROJECTILES:
-                    projectile = pygame.Rect(red.x + red.width, red.y + red.height/2 - 2.5, 10, 5)
+                    projectile = pygame.Rect(red.x + red.width, red.y + red.height/2 + 2.5, 10, 5)
                     red_projectiles.append(projectile)
 
                 if event.key == pygame.K_RCTRL and len(yellow_projectiles) < MAX_PROJECTILES:
-                    projectile = pygame.Rect(yellow.x, yellow.y + yellow.height/2 - 2.5, 10, 5)
+                    projectile = pygame.Rect(yellow.x, yellow.y + yellow.height/2 + 2.5, 10, 5)
                     yellow_projectiles.append(projectile)
 
         keys_pressed = pygame.key.get_pressed()
         handle_red_movement(keys_pressed, red)
         handle_yellow_movement(keys_pressed, yellow)
 
-        handle_projectiles(red_projectiles, yellow_projectiles, red, yellow)
+        handle_projeciles(red_projectiles, yellow_projectiles, red, yellow)
          
-        draw_window(red, yellow)
+        draw_window(red, yellow, red_projectiles, yellow_projectiles)
 
     pygame.quit()
 
