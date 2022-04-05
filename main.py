@@ -15,6 +15,9 @@ MAX_PROJECTILES = 5
 
 SPACESHIP_WIDTH, SPACESHIP_HEIGHT = 55, 45
 
+RED_HIT = pygame.USEREVENT + 1
+YELLOW_HIT = pygame.USEREVENT + 2
+
 RED_SPACESHIP_IMAGE = pygame.image.load(os.path.join(
     'Assets', 'spaceship_red.png'))
 RED_SPACESHIP = pygame.transform.rotate(pygame.transform.scale(
@@ -53,6 +56,22 @@ def handle_yellow_movement(keys_pressed, yellow):
         if keys_pressed[pygame.K_DOWN] and yellow.y + VEL < HEIGHT - SPACESHIP_HEIGHT - 5: # DOWN
             yellow.y += VEL
 
+def handle_projeciles(red_projectiles, yellow_projectiles, red, yellow):
+
+    for projectile in red_projectiles:
+        projectile.x += PROJECTILE_VEL
+       
+        if red.colliderect(projectile):
+            pygame.event.post(pygame.event.Event(YELLOW_HIT))
+            red_projectiles.remove(projectile)
+
+    for projectile in yellow_projectiles:
+        projectile.x += PROJECTILE_VEL
+       
+        if yellow.colliderect(projectile):
+            pygame.event.post(pygame.event.Event(RED_HIT))
+            yellow_projectiles.remove(projectile)
+
 def main():
 
     red = pygame.Rect(100, 200, SPACESHIP_WIDTH, SPACESHIP_HEIGHT)
@@ -78,10 +97,12 @@ def main():
                 if event.key == pygame.K_RCTRL and len(yellow_projectiles) < MAX_PROJECTILES:
                     projectile = pygame.Rect(yellow.x, yellow.y + yellow.height/2 - 2.5, 10, 5)
                     yellow_projectiles.append(projectile)
-        print(red_projectiles, yellow_projectiles)
+
         keys_pressed = pygame.key.get_pressed()
         handle_red_movement(keys_pressed, red)
         handle_yellow_movement(keys_pressed, yellow)
+
+        handle_projectiles(red_projectiles, yellow_projectiles, red, yellow)
          
         draw_window(red, yellow)
 
