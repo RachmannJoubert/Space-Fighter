@@ -1,7 +1,10 @@
 import pygame
-import os
-pygame.font.init()
-pygame.mixer.init()
+
+from global_var import *
+from draw_window import draw_window
+from handle_movement import handle_red_movement, handle_yellow_movement
+from handle_projectiles import handle_projeciles
+from winner import winner
 
 pygame.display.set_caption("Space Pong")
 

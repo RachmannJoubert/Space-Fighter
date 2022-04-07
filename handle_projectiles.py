@@ -1,3 +1,6 @@
+import pygame
+from global_var import *
+
 def handle_projeciles(red_projectiles, yellow_projectiles, red, yellow):
 
     for projectile in red_projectiles:

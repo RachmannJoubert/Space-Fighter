@@ -1,3 +1,6 @@
+import pygame
+from global_var import *
+
 def handle_red_movement(keys_pressed, red):
         if keys_pressed[pygame.K_a] and red.x - VEL > 0 -5: # LEFT
             red.x -= VEL

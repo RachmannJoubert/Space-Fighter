@@ -1,3 +1,6 @@
+import pygame
+from global_var import *
+
 def draw_window(red, yellow, red_projectiles, yellow_prjectiles, red_health, yellow_health):
 
     WIN.blit(BACKGROUND_IMG, (0, 0))
